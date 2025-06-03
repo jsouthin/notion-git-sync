@@ -1,4 +1,4 @@
-   # Notion Sync
+   # Notion Git Sync
 
    Synchronize Notion pages to markdown files with frontmatter support.
 
@@ -11,12 +11,12 @@
 
    ## Installation
    ```bash
-   pip install notion-sync
+   pip install notion-git-sync
    ```
 
    ## Usage
    ```python
-   from notion_sync import NotionSync, Config
+   from notion_git_sync import NotionSync, Config
 
    config = Config.from_env()
    syncer = NotionSync(config)

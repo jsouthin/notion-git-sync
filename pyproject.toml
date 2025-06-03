@@ -11,7 +11,7 @@ requires-python = ">=3.9"
 license = {text = "MIT"}
 keywords = ["notion", "markdown", "documentation", "sync"]
 authors = [
-    {name = "Your Name", email = "you@example.com"}
+    {name = "Joe Southin", email = "joe.southin@gmail.com"}
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -42,12 +42,12 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/jsouthin/notion-sync"
-Repository = "https://github.com/jsouthin/notion-sync.git"
-Documentation = "https://github.com/jsouthin/notion-sync#readme"
+Homepage = "https://github.com/jsouthin/notion-git-sync"
+Repository = "https://github.com/jsouthin/notion-git-sync.git"
+Documentation = "https://github.com/jsouthin/notion-git-sync#readme"
 
 [project.scripts]
-notion-sync = "notion_sync.sync:main"
+notion-git-sync = "notion_git_sync.sync:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
