@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "notion-git-sync"
-version = "0.1.4"
+version = "0.1.5"
 description = "Synchronize Notion pages to markdown files with frontmatter support"
 readme = "README.md"
 requires-python = ">=3.9"

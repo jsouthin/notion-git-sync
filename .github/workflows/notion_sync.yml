@@ -19,6 +19,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.x' }
       - run: pip install notion-client pyyaml
+      - run: pip install -e .  # Install the package in development mode
       - run: python scripts/notion_sync.py
       - name: Stage changes
         run: |
