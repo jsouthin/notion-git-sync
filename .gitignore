@@ -32,3 +32,10 @@ MANIFEST
 # PyPI configuration
 .pypirc
 
+# macOS system files
+.DS_Store
+src/.DS_Store
+
+# Test coverage
+.coverage
+

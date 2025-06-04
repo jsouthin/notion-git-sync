@@ -71,6 +71,25 @@ jobs:
       - run: python -m notion_git_sync.sync
 ```
 
+#### Repository Configuration
+The GitHub Actions workflow will push changes to the same repository where the workflow is running. Make sure to:
+
+1. Configure repository permissions to allow the workflow to push changes:
+   - Go to your repository's Settings > Actions > General
+   - Under "Workflow permissions", select "Read and write permissions"
+   - Save the changes
+
+2. If you want to push to a different repository:
+   - Add a Personal Access Token (PAT) with repo scope as a repository secret
+   - Configure the remote URL in your workflow to use the PAT:
+     ```yaml
+     - name: Configure Git
+       run: |
+         git config --global user.name "GitHub Actions"
+         git config --global user.email "actions@github.com"
+         git remote set-url origin https://${{ secrets.PAT }}@github.com/username/repo.git
+     ```
+
 ## Configuration
 
 ### Environment Variables
