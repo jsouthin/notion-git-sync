@@ -1,0 +1,46 @@
+name: notion-sync
+on:
+  schedule: [{ cron: '5 2 * * *' }]   # nightly 02:05 UTC
+  workflow_dispatch:
+permissions:                          # <-- REQUIRED for commit + PR
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_PARENT_IDS: ${{ secrets.NOTION_PARENT_IDS }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }           # always start from main
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.x' }
+      - run: pip install notion-client pyyaml
+      - run: python scripts/notion_sync.py
+      - name: Stage changes
+        run: |
+          git add .
+          git status
+
+      # ── Commit & PR only when staged changes exist ─────────────
+      - name: Commit & open pull-request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          BR="notion-sync-$(date +%s)"
+          git config --global user.email "notionbot@yourcompany.com"
+          git config --global user.name  "Notion Sync Bot"
+          git checkout -b "$BR"
+          git commit -m "chore: nightly Notion sync"
+          git push -u origin "$BR"
+          gh pr create \
+            --title "Nightly Notion sync ($(date +%Y-%m-%d))" \
+            --body  "Automated import of Notion docs." \
+            --base  main \
+            --head  "$BR"

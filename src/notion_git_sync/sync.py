@@ -127,15 +127,24 @@ class NotionSync:
             
         return None
     
-    def walk_pages(self, parent_id: str) -> Iterator[str]:
+    def walk_pages(self, parent_id: str, visited: Optional[set] = None) -> Iterator[str]:
         """Recursively yield all child page IDs from a parent.
         
         Args:
             parent_id: Parent page ID to start from
+            visited: Set of already visited page IDs to prevent cycles
             
         Yields:
             Child page IDs
         """
+        if visited is None:
+            visited = set()
+            
+        if parent_id in visited:
+            return
+            
+        visited.add(parent_id)
+        
         try:
             blocks = collect_paginated_api(
                 self.config.notion_client.blocks.children.list,
@@ -145,9 +154,9 @@ class NotionSync:
             for block in blocks:
                 if block["type"] == "child_page":
                     yield block["id"]
-                    yield from self.walk_pages(block["id"])
+                    yield from self.walk_pages(block["id"], visited)
                 elif block["type"] == "toggle":
-                    yield from self.walk_pages(block["id"])
+                    yield from self.walk_pages(block["id"], visited)
                     
         except APIResponseError as e:
             print(f"API error walking pages from {parent_id}: {e}")

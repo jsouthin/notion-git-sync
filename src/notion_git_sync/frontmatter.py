@@ -89,15 +89,12 @@ class FrontmatterHandler:
             return "".join(t["plain_text"] for t in rich_text) if rich_text else ""
 
         def check_blocks_for_yaml(blocks: list) -> tuple[Optional[str], bool]:
-            """Recursively check blocks for YAML content."""
             # First pass: Look for YAML in metadata toggle
             for block in blocks:
                 block_type = block["type"]
-                
                 if block_type == "toggle":
                     rich_text = block["toggle"].get("rich_text", [])
                     toggle_text = get_text_from_rich_text(rich_text)
-                    
                     if is_metadata_toggle(toggle_text):
                         if block.get("has_children"):
                             children = collect_paginated_api(
@@ -117,7 +114,6 @@ class FrontmatterHandler:
                 if block["type"].startswith("heading_1"):
                     found_title = True
                     continue
-                    
                 if found_title and block["type"] == "code" and block["code"]["language"].lower() == "yaml":
                     rich_text = block["code"].get("rich_text", [])
                     yaml_text = clean_yaml(get_text_from_rich_text(rich_text))
@@ -131,7 +127,6 @@ class FrontmatterHandler:
                     yaml_text = clean_yaml(get_text_from_rich_text(rich_text))
                     if self.is_valid(yaml_text):
                         return yaml_text, False
-                        
                 # Check children of blocks
                 if block.get("has_children"):
                     children = collect_paginated_api(
@@ -141,7 +136,6 @@ class FrontmatterHandler:
                     yaml_text, in_toggle = check_blocks_for_yaml(children)
                     if yaml_text:
                         return yaml_text, in_toggle
-            
             return None, False
 
         yaml_text, _ = check_blocks_for_yaml(blocks)
