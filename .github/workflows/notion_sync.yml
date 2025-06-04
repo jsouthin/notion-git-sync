@@ -1,7 +1,5 @@
 name: notion-sync
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 permissions:                          # <-- REQUIRED for commit + PR
   contents: write
